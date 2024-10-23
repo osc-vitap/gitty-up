@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+
+import subprocess
+
+ascii_art = """ _____ _ _   _          _____     
+|   __|_| |_| |_ _ _   |  |  |___ 
+|  |  | |  _|  _| | |  |  |  | . |
+|_____|_|_| |_| |_  |  |_____|  _|
+                |___|        |_|"""
+
+print(ascii_art)
+
+def get_staged_files():
+    """Returns a list of files that are staged for commit."""
+    result = subprocess.run(['git', 'diff', '--cached', '--name-only'], capture_output=True, text=True)
+    return result.stdout.splitlines()
+
+def show_file_diff(file):
+    """Displays the diff of the staged changes for the given file."""
+    correct_answers = [
+        'clouds',
+        'seven',
+        'ivory',
+        'division',
+        '1969',
+
+        'carbon',
+        'beijing',
+        'three',
+        'jupiter',
+        'chlorophyll'
+    ]
+
+    answers = []    
+    with open(file, 'r') as f:
+        answers = [i.lower()[:-1] if '\n' in i else i.lower() for i in f.readlines() if len(i) > 1]
+        question_number = len(answers)
+
+        if (answers[question_number - 1] == correct_answers[question_number - 1]):
+            print(f"Question {question_number} is correct!\n\n")
+        else:
+            print(f"Question {question_number} is incorrect. The correct answer is {correct_answers[question_number - 1]}.\n\n")
+
+
+
+def main():
+    # Get the list of staged files
+    staged_files = get_staged_files()
+
+    # Check if 'main.txt' is staged for commit
+    if 'main.txt' in staged_files:
+        show_file_diff('main.txt')
+    else:
+        print("No changes to 'main.txt' are staged for commit.")
+
+if __name__ == "__main__":
+    main()
