@@ -9,14 +9,14 @@ let records = [];
 for (const participant of participants) {
     if (participant[0] === "registration_number") continue;
     console.log('Provisioning', participant[0]);
-    appendRecord(participant);
+    appendRecord(records, participant);
     createConfFile(participant);
 }
 await postRecords(records);
 }
 
 
-function appendRecord(participant) {
+function appendRecord(records, participant) {
     records.push({
         "name": `${participant[0]}.oscvitap.org`,
         "proxied": true,
