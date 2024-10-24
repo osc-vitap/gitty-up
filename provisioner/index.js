@@ -35,8 +35,8 @@ async function postRecords(records) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-Auth-Email': "process.env.CLOUDFLARE_EMAIL",
-            'X-Auth-Key': "process.env.CLOUDFLARE_API_KEY"
+            'X-Auth-Email': process.env.CLOUDFLARE_EMAIL,
+            'X-Auth-Key': process.env.CLOUDFLARE_API_KEY
         },
         body: JSON.stringify({ posts: records })
     });
