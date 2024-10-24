@@ -50,7 +50,7 @@ async function postRecords(records) {
 
 
 function createConfFile(participant) {
-    fs.writeFileSync(`../${process.env.NGINX_INCLUDE_DIR}/${participant[1]}.conf`,
+    fs.writeFileSync(`${process.env.NGINX_INCLUDE_DIR}/${participant[1]}.conf`,
         `server {
     listen 443 ssl;
         server_name ${participant[1]}.oscvitap.org;
@@ -71,7 +71,7 @@ function createConfFile(participant) {
 }
 
 function runDocker(participant) {
-    console.log("Running Docker for",participant[0])
+    console.log("Running Docker for",participant[1])
     exec(`docker run --name gitty-up-${participant[1]} -p ${participant[2]}:8080 -e PASSWORD=${participant[3]} -e CODER_MESSAGE=Hi -e REG_NO=${participant[1]} -d ghcr.io/osc-vitap/gitty-up-code-server:0.2.0`,(error,stdout,stderr) => {
         if (error) {
             console.log(`docker error: ${error.message}`);
