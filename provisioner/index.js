@@ -7,8 +7,8 @@ async function main() {
 const participants = fs.readFileSync("./data.csv", "utf8").split("\n").filter(x => x !== "").map((line) => line.split(", ").map((item) => item.trim()));
 let records = [];
 for (const participant of participants) {
-    if (participant[0] === "registration_number") continue;
-    console.log('Provisioning', participant[0]);
+    if (participant[1] === "registration_number") continue;
+    console.log('Provisioning', participant[1]);
     appendRecord(records, participant);
     createConfFile(participant);
     runDocker(participant);
@@ -19,7 +19,7 @@ await postRecords(records);
 
 function appendRecord(records, participant) {
     records.push({
-        "name": `${participant[0]}.oscvitap.org`,
+        "name": `${participant[1]}.oscvitap.org`,
         "proxied": true,
         "comment": "testing",
         "settings": {},
@@ -50,10 +50,10 @@ async function postRecords(records) {
 
 
 function createConfFile(participant) {
-    fs.writeFileSync(`../${process.env.NGINX_INCLUDE_DIR}/${participant[0]}.conf`,
+    fs.writeFileSync(`../${process.env.NGINX_INCLUDE_DIR}/${participant[1]}.conf`,
         `server {
     listen 443 ssl;
-        server_name ${participant[0]}.oscvitap.org;
+        server_name ${participant[1]}.oscvitap.org;
 
     ssl_certificate /etc/nginx/ssl-cert.pem;
         ssl_certificate_key /etc/nginx/private.key;
@@ -72,7 +72,7 @@ function createConfFile(participant) {
 
 function runDocker(participant) {
     console.log("Running Docker for",participant[0])
-    exec(`docker run --name gitty-up-${participant[0]} -p ${participant[2]}:8080 -e PASSWORD=${participant[1]} -e CODER_MESSAGE=Hi -e REG_NO=${participant[0]} -d ghcr.io/osc-vitap/gitty-up-code-server:0.2.0`,(error,stdout,stderr) => {
+    exec(`docker run --name gitty-up-${participant[1]} -p ${participant[2]}:8080 -e PASSWORD=${participant[3]} -e CODER_MESSAGE=Hi -e REG_NO=${participant[1]} -d ghcr.io/osc-vitap/gitty-up-code-server:0.2.0`,(error,stdout,stderr) => {
         if (error) {
             console.log(`docker error: ${error.message}`);
             return;
